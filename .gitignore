@@ -3,3 +3,5 @@ cscope.*
 *.rej
 *~
 *.o
+vblade.exe
+vblade.map

@@ -1,0 +1,66 @@
+
+vblade-19 ported to Windows/cygwin
+ 
+ - Uses the winpcap library to read, write and filter raw ethernet packets
+ - winpcap version 4.0.2 (WpdPack_4_0_2)
+ - gcc version 3.4.4 (cygming special, gdc 0.12, using dmd 0.125)
+ - GNU Make 3.81
+
+
+
+BUILDING
+--------
+
+Download and unzip WpdPack_4_0_2.zip into the vblade-19.win32 directory
+Install cygwin tools. 
+Build from the bash shell:
+
+   make -f makefile.win32
+
+
+RUNNING
+-------
+
+Running vblade on windows requires the same arguments, but the winpcap packet driver 
+uses rather odd network device names. The best way to figure out what the names are is to
+startup vblade with a bogus network device name, and let vblade list out the available devices. 
+Other parameters must be valid. Example:
+
+
+bash-3.2$ ./vblade.exe -b 65  0 0   xxx   "c:\CCdata\XPfile.img"
+\Device\NPF_GenericDialupAdapter
+	Description: Adapter for generic dialup and VPN capture
+	Loopback: no
+...
+
+\Device\NPF_{FB5B0B4F-7E1F-46A9-AE38-8538E79653EF}
+	Description: VMware Virtual Ethernet Adapter
+	Loopback: no
+	Address Family: #2
+	Address Family Name: AF_INET
+	Address: 192.168.135.1
+	Netmask: 255.255.255.0
+	Broadcast Address: 255.255.255.255
+
+Unable to open the adapter. xxx is not supported by WinPcap
+
+	
+Then copy and paste the desired device name, in this case, "NPF_{FB5B0B4F-7E1F-46A9-AE38-8538E79653EF}"
+
+
+	bash-3.2$ ./vblade.exe -b 65  0 0  "NPF_{FB5B0B4F-7E1F-46A9-AE38-8538E79653EF}"   "c:\CCdata\XPfile.img"
+
+
+ 
+
+Other Notes
+----------------------------
+
+- Default buffer count of 16 seems a bit low for windows usage; booting seemed a bit
+  sluggish. Recommend -b 65 minimum.
+- Built and tested on Windows XP only
+- Only tested with an disk image file, not with a Windows/cygwin disk device file
+- Only tested with a Window XP initiator (client) with the WinAoE driver installed
+- Requires administrative privilages to run vblade on windows
+
+
